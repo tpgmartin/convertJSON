@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/converter.test.js --watch"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,8 @@
   "homepage": "https://github.com/tpgmartin/convertJSON",
   "devDependencies": {
     "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "js-yaml": "^3.4.3"
   }
 }
