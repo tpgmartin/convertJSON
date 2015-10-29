@@ -20,11 +20,47 @@ describe('converter', function() {
         assert.equal(output, "---\n");
     });
 
-    it('should return correct yaml JSON containing strings', function () {
+    it('should return correct yaml for JSON containing strings', function () {
         var input = { "foo": "bar" };
 
         var output = converter.parse(input);
 
         assert.equal(output, "---\n\tfoo: 'bar'");
     });
+
+
+    it('should return correct yaml for JSON containing empty array', function () {
+        var input = { "emptyArray": [] };
+
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\temptyArray: []");
+    });
+
+
+    it('should return correct yaml for JSON containing nonempty array', function () {
+        var input = { "array": [ "foo", "bar" ] };
+
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\tarray:\n\t\t- 'foo'\n\t\t- 'bar'\n");
+    });
+
+    it('should return correct yaml for JSON containing empty object', function () {
+        var input = { "emptyArray": {} };
+
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\temptyArray: {}");
+    });
+
+    it('should return correct yaml for JSON containing nonempty object', function () {
+        var input = { "object": { "foo": "hello", "bar": "there" } };
+
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\tobject:\n\t\tfoo: 'hello'\n\t\tbar: 'there'\n");
+    });
+
+
 });
