@@ -25,7 +25,7 @@ describe('converter', function() {
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\tfoo: 'bar'");
+        assert.equal(output, "---\n\tfoo: bar\n");
     });
 
 
@@ -34,7 +34,7 @@ describe('converter', function() {
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\temptyArray: []");
+        assert.equal(output, "---\n\temptyArray: []\n");
     });
 
 
@@ -43,7 +43,15 @@ describe('converter', function() {
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\tarray:\n\t\t- 'foo'\n\t\t- 'bar'\n");
+        assert.equal(output, "---\n\tarray:\n\t\t- foo\n\t\t- bar\n");
+    });
+
+    it('should return correct yaml for JSON containing nonempty nested array', function () {
+        var input = { "array": [ [ 1, 2 ], 3 ] };
+
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\tarray:\n\t\t- \n\t\t\t- 1 \n\t\t\t- 2\n\t\t- 3\n");
     });
 
     it('should return correct yaml for JSON containing empty object', function () {
@@ -51,7 +59,7 @@ describe('converter', function() {
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\temptyArray: {}");
+        assert.equal(output, "---\n\temptyArray: {}\n");
     });
 
     it('should return correct yaml for JSON containing nonempty object', function () {
@@ -62,5 +70,11 @@ describe('converter', function() {
         assert.equal(output, "---\n\tobject:\n\t\tfoo: 'hello'\n\t\tbar: 'there'\n");
     });
 
+    it('should return correct yaml for JSON containing undefined or null value', function () {
+        var input = { "undefinedValue": undefined };
 
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\tundefinedValue: undefined\n");
+    });
 });

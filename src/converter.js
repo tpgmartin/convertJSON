@@ -9,16 +9,16 @@ function parse (input) {
     keys.map(function (key) {
         if (input[key] instanceof Array) {
             if (input[key].length === 0) {
-                yaml += "\t" +  key + ": []";
+                yaml += "\t" +  key + ": []\n";
             } else {
                 yaml += "\t" +  key + ":\n";
                 input[key].map(function (elem) {
-                    yaml += "\t\t- '" +  elem + "'\n";
+                    yaml += "\t\t- " +  elem + "\n";
                 });
             }
         } else if (input[key] instanceof Object) {
             if (Object.keys(input[keys]).length === 0) {
-                yaml += "\t" +  key + ": {}";
+                yaml += "\t" +  key + ": {}\n";
             } else {
                 yaml += "\t" +  key + ":\n";
                 Object.keys(input[key]).map(function (elem) {
@@ -26,7 +26,7 @@ function parse (input) {
                 });
             }
         } else {
-            yaml += "\t" +  key + ": " + "'" + input[key] + "'";
+            yaml += "\t" +  key + ": " + input[key] + "\n";
         }
     });
 
