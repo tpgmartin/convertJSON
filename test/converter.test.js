@@ -51,7 +51,7 @@ describe('converter', function() {
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\tarray:\n\t\t- \n\t\t\t- 1 \n\t\t\t- 2\n\t\t- 3\n");
+        assert.equal(output, "---\n\tarray:\n\t\t-\n\t\t\t- 1\n\t\t\t- 2\n\t\t- 3\n");
     });
 
     it('should return correct yaml for JSON containing empty object', function () {
