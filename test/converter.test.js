@@ -55,11 +55,11 @@ describe('converter', function() {
     });
 
     it('should return correct yaml for JSON containing empty object', function () {
-        var input = { "emptyArray": {} };
+        var input = { "emptyObject": {} };
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\temptyArray: {}\n");
+        assert.equal(output, "---\n\temptyObject: {}\n");
     });
 
     it('should return correct yaml for JSON containing nonempty object', function () {
@@ -67,7 +67,15 @@ describe('converter', function() {
 
         var output = converter.parse(input);
 
-        assert.equal(output, "---\n\tobject:\n\t\tfoo: 'hello'\n\t\tbar: 'there'\n");
+        assert.equal(output, "---\n\tobject:\n\t\tfoo: hello\n\t\tbar: there\n");
+    });
+
+    it('should return correct yaml for JSON containing nonempty nested object', function () {
+        var input = { "object": { "foo": { "colour": "blue" }, "bar": "hey" } };
+
+        var output = converter.parse(input);
+
+        assert.equal(output, "---\n\tobject:\n\t\tfoo:\n\t\t\tcolour: blue\n\t\tbar: hey\n");
     });
 
     it('should return correct yaml for JSON containing undefined or null value', function () {

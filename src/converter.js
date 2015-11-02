@@ -13,20 +13,36 @@ function parse (input) {
         if (input[key] instanceof Array) {
             parseArray(key, input[key], '');
         } else if (input[key] instanceof Object) {
-            if (Object.keys(input[keys]).length === 0) {
-                yaml += "\t" +  key + ": {}\n";
-            } else {
-                yaml += "\t" +  key + ":\n";
-                Object.keys(input[key]).map(function (elem) {
-                    yaml += "\t\t" +  elem + ": '" + input[key][elem] + "'\n";
-                });
-            }
+            console.log('1', key);
+            parseObject(key, input[key], '');
         } else {
             yaml += "\t" +  key + ": " + input[key] + "\n";
         }
     });
 
     return yaml;
+}
+
+function parseObject (key, values, nesting) {
+    var tabs = nesting + "\t";
+
+    if (Object.keys(values).length === 0) {
+        yaml += tabs +  key + ": {}\n";
+    } else {
+        if (nesting.length < 1) {
+            yaml += tabs +  key + ":\n";
+        }
+        Object.keys(values).map(function (elem) {
+            if (values[elem] instanceof Object) {
+                yaml += tabs + "\t" +  elem + ":\n";
+                parseObject(Object.keys(values[elem])[0], values[elem], nesting+"\t");
+            } else {
+                yaml += tabs + "\t" +  elem + ": " + values[elem] + "\n";
+            }
+        });
+    }
+
+    console.log(yaml);
 }
 
 function parseArray (key, values, nesting) {
@@ -43,7 +59,7 @@ function parseArray (key, values, nesting) {
 
         values.map(function (elem) {
             if (elem instanceof Array) {
-                parseArray('', elem, "\t");
+                parseArray('', elem, nesting+"\t");
             } else {
                 yaml += tabs + "\t- " +  elem + "\n";
             }
