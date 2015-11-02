@@ -1,4 +1,25 @@
+var fs = require('fs');
+
 var yaml;
+
+function read (filename) {
+    fs.readFile(__dirname + filename, 'utf8', function (err, data) {
+       if (err) {
+           return console.log(err);
+       }
+        console.log(JSON.stringify(data));
+        return data;
+    });
+}
+
+function write (filename, markup) {
+    fs.writeFile(__dirname + filename, markup, function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("The file was saved!");
+    });
+}
 
 function parse (input) {
     var keys = Object.keys(input);
@@ -13,7 +34,6 @@ function parse (input) {
         if (input[key] instanceof Array) {
             parseArray(key, input[key], '');
         } else if (input[key] instanceof Object) {
-            console.log('1', key);
             parseObject(key, input[key], '');
         } else {
             yaml += "\t" +  key + ": " + input[key] + "\n";
@@ -41,8 +61,6 @@ function parseObject (key, values, nesting) {
             }
         });
     }
-
-    console.log(yaml);
 }
 
 function parseArray (key, values, nesting) {
@@ -65,8 +83,10 @@ function parseArray (key, values, nesting) {
             }
         });
     }
-};
+}
 
 module.exports = {
-    parse: parse
+    parse: parse,
+    read: read,
+    write: write
 };
