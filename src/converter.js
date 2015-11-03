@@ -1,23 +1,17 @@
-var fs = require('fs');
-
-var yaml;
+var fs = require('fs'),
+    yaml;
 
 function read (filename) {
     return JSON.parse(fs.readFileSync(filename, "utf8"));
 }
 
 function write (filename, markup) {
-    fs.writeFile(__dirname + filename, markup, function(err) {
-        if(err) {
-            return console.log(err);
-        }
-        console.log("The file was saved!");
-    });
+    return fs.writeFileSync(filename, markup,  "utf8");
 }
 
 function parse (input) {
 
-    var contents, isFile, keys;
+    var contents, isFile, keys, output;
 
     isFile = /\.[a-z]+$/.test(input);
     contents = isFile ? read(input) : input;
@@ -38,7 +32,10 @@ function parse (input) {
         }
     });
 
-    return yaml;
+    // output same filename with yml extension to root
+    output = input.split(/[./]/).slice(-2,-1)[0] + '.yml';
+
+    write(output, yaml);
 }
 
 function parseObject (key, values, nesting) {
@@ -84,7 +81,5 @@ function parseArray (key, values, nesting) {
 }
 
 module.exports = {
-    parse: parse,
-    read: read,
-    write: write
+    parse: parse
 };
