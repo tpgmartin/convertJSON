@@ -1,5 +1,4 @@
 var assert = require('assert'),
-    yaml = require('js-yaml'),
     fs = require('fs'),
     converter = require('../src/converter');
 
@@ -84,5 +83,13 @@ describe('converter', function() {
         var output = converter.parse(input);
 
         assert.equal(output, "---\n\tundefinedValue: undefined\n");
+    });
+
+    it('should read from basic yaml file', function () {
+        var input = './test/simple.yml';
+
+        var output = converter.read(input);
+
+        assert.equal(output, "hello");
     });
 });

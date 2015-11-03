@@ -3,13 +3,7 @@ var fs = require('fs');
 var yaml;
 
 function read (filename) {
-    fs.readFile(__dirname + filename, 'utf8', function (err, data) {
-       if (err) {
-           return console.log(err);
-       }
-        console.log(JSON.stringify(data));
-        return data;
-    });
+    return JSON.parse(fs.readFileSync(filename, "utf8"));
 }
 
 function write (filename, markup) {
@@ -22,21 +16,25 @@ function write (filename, markup) {
 }
 
 function parse (input) {
-    var keys = Object.keys(input);
+
+    var contents, isFile, keys;
+
+    isFile = /\.[a-z]+$/.test(input);
+    contents = isFile ? read(input) : input;
+
+    keys = Object.keys(contents);
+
+    if (!keys.length) return null;
+
     yaml = "---\n";
 
-
-    if (!keys.length) {
-        return null;
-    }
-
     keys.map(function (key) {
-        if (input[key] instanceof Array) {
-            parseArray(key, input[key], '');
-        } else if (input[key] instanceof Object) {
-            parseObject(key, input[key], '');
+        if (contents[key] instanceof Array) {
+            parseArray(key, contents[key], '');
+        } else if (contents[key] instanceof Object) {
+            parseObject(key, contents[key], '');
         } else {
-            yaml += "\t" +  key + ": " + input[key] + "\n";
+            yaml += "\t" +  key + ": " + contents[key] + "\n";
         }
     });
 
